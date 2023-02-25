@@ -16,13 +16,14 @@ const router = express.Router();
 router.route('/children')
     .get(childrenController.getAllChildren)
     .post(childrenvalidator.postValidator,validatevm,childrenController.addNewChild)
-    .put(childrenvalidator.putValidator,validatevm,childrenController.updateChild)
-    .delete(childrenvalidator.deleteValidator,validatevm,childrenController.deleteChild);
     
 
 // get specific children whith id 
 router.route('/child/:id')
     .get(childrenvalidator.getValidator,validatevm,childrenController.getspecificChildren)
+    .delete(childrenvalidator.deleteValidator,validatevm,childrenController.deleteChild)
+    .put(childrenvalidator.putValidator,validatevm,childrenController.updateChild)
+
 // export router
 module.exports = router;
 

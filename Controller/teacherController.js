@@ -2,6 +2,7 @@
 const mongoose = require('mongoose');
 // load teacher model
 require('../Model/teacherModel');
+const { body, param,query } = require('express-validator');
 
 // import bcrypt
 const bcrypt = require('bcrypt');

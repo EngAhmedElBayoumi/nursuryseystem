@@ -1,5 +1,7 @@
 // import mongoose
 const mongoose = require('mongoose');
+const { body, param,query } = require('express-validator');
+
 
 // load children model
 require('../Model/childrenModel');
@@ -25,7 +27,7 @@ exports.getspecificChildren = (request, response,next) => {
       if (data == null) {
         throw new Error("Child not Found");
       } else {
-        res.status(200).json({ data });
+        response.status(200).json({ data });
       }
     })
     .catch((error) => next(error));
@@ -59,7 +61,7 @@ exports.updateChild = (request, response, next) => {
     childrenSchema
     .updateOne
     (
-                { _id: request.body.id },
+                { _id: request.params.id },
                 {
                     $set: {
                         _id:request.body.id,
@@ -93,7 +95,7 @@ exports.updateChild = (request, response, next) => {
 //export delete child function
 exports.deleteChild = (request, response, next) => {
     childrenSchema
-    .deleteOne({ _id: request.body.id })
+    .deleteOne({ _id: request.params.id })
     .then((data) => {
       if (data.deletedCount == 0) {
         next(new Error("child not found"));
