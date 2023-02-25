@@ -1,8 +1,6 @@
 
-
 // import mongoose
 const mongoose = require('mongoose');
-
 const {body,param,query}=require("express-validator");
 // load class
 require('../Model/classModel');
@@ -20,91 +18,71 @@ exports.getAllClasses = (request, response) => {
     )
     .catch((error) => next(error));
 }
-
 //export add new Class function
 exports.addNewClass = (request, response, next) => {
-    /** check if request.body.supervisor exist in teacherschema _id  */
-    teacherSchema
-        .findOne({_id:request.body.supervisor})
-        .then((data)=>{
-            if(data==null){
-                throw new Error("this id not related to any teacher");
-            }
-        })
-        .catch((error)=>next(error));
-    /** check if all element in request.body.children array exist in childrenschema _id */
-    childrenSchema
-    .find({ _id: { $in: request.body.children } })
-    .then((data)=>{
-        if(data.length!=request.body.children.length){
-            throw new Error("not all child id  related to our children");
+    const { id, name, supervisor, children } = request.body;
+  
+    Promise.all([
+      teacherSchema.findOne({ _id: supervisor }),
+      childrenSchema.find({ _id: { $in: children } }),
+    ])
+      .then(([supervisorData, childrenData]) => {
+        if (!supervisorData) {
+          throw new Error("Supervisor not found");
         }
-        else{
-        console.log(data)
-        new classSchema({
-            _id: request.body.id,
-            name: request.body.name,
-            supervisor: request.body.supervisor,
-            children: request.body.children,
-        })
-        .save()
-        .then((data) => {
-            response.status(200).json({ data });
+  
+        if (childrenData.length !== children.length) {
+          throw new Error("Not all children found");
         }
-        )
-        .catch((error) => next(error));
-      }
-    })
-    .catch((error)=>next(error));
-}
-
-
-
-
-    
-
-   
-    
-
+  
+        const newClass = new classSchema({
+          _id: id,
+          name,
+          supervisor,
+          children,
+        });
+  
+       return newClass.save();
+      })
+      .then((data) => {
+        response.status(200).json({ data });
+      })
+      .catch((error) => next(error));
+  };
 //export update Class function
 exports.updateClass = (request, response, next) => {
-    teacherSchema
-        .findOne({_id:request.body.supervisor})
-        .then((data)=>{
-            if(data==null){
-                throw new Error("Teacher not Found");
-            }
-        })
-        .catch((error)=>next(error));
+    const { id, name, supervisor, children } = request.body;
   
-    childrenSchema
-    .find({ _id: { $in: request.body.children } })
-    .then((data)=>{
-        if(data.length!=request.body.children.length){
-            throw new Error("not all child id  related to our children");
+    Promise.all([
+      teacherSchema.findOne({ _id: supervisor }),
+      childrenSchema.find({ _id: { $in: children } }),
+    ])
+      .then(([supervisorData, childrenData]) => {
+        if (!supervisorData) {
+          throw new Error("Supervisor id not exist in our nursery");
         }
-        else{
-            classSchema
-            .updateOne
-            (
-                { _id: request.body.id },
-                {
-                    $set: {
-                        _id: request.body.id,
-                        name: request.body.name,
-                        supervisor: request.body.teacher,
-                        children: request.body.children,
-                    }
-                }
-            )
-            .then((data) => {
-                response.status(200).json({ data });
-            })
+  
+        if (childrenData.length !== children.length) {
+          throw new Error("Not all children id  exist in our nursery");
         }
-        })
-    .catch((error)=>next(error));
-}
-
+  
+        return classSchema.updateOne(
+        { _id: request.body.id },
+        {
+          $set: {
+            _id: request.body.id,
+            name,
+            supervisor,
+            children,
+          },
+        }
+      );
+    })
+      .then((data) => {
+        response.status(200).json({ data });
+      })
+      .catch((error) => next(error));
+  };
 //export delete Class function
 exports.deleteClass = (request, response, next) => {
     classSchema
@@ -115,10 +93,7 @@ exports.deleteClass = (request, response, next) => {
     )
     .catch((error) => next(error));
 }
-
-
 // export get children classes
-
 exports.getChildrenClasses = (request, response,next) => {
     // get all children that ref with class in array children 
     classSchema
@@ -129,7 +104,6 @@ exports.getChildrenClasses = (request, response,next) => {
     )
     .catch((error) => next(error));
 }
-
 // export get teacher classes
 exports.getTeacherClasses = (request, response,next) => {
     classSchema

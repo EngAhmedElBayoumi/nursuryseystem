@@ -6,9 +6,6 @@ const { body, param,query } = require('express-validator');
 // load children model
 require('../Model/childrenModel');
 const childrenSchema = mongoose.model("children");
-
-
-
 // export get all children function
 exports.getAllChildren = (request, response,next) => { 
     childrenSchema
@@ -18,7 +15,6 @@ exports.getAllChildren = (request, response,next) => {
     })
     .catch((error) => next(error));
 };
-
 // export get specific child function
 exports.getspecificChildren = (request, response,next) => {
     childrenSchema
@@ -32,8 +28,6 @@ exports.getspecificChildren = (request, response,next) => {
     })
     .catch((error) => next(error));
 };
-
-
 //export add new child function
 exports.addNewChild = (request, response, next) => { 
      new childrenSchema({
@@ -55,7 +49,6 @@ exports.addNewChild = (request, response, next) => {
     .catch((error) => next(error));
 
 }
-
 //export update child function
 exports.updateChild = (request, response, next) => {
     childrenSchema
