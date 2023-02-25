@@ -5,7 +5,9 @@ const { body, param,query } = require('express-validator');
 
 // load children model
 require('../Model/childrenModel');
+require('../Model/classModel');
 const childrenSchema = mongoose.model("children");
+const classSchema = mongoose.model("class");
 // export get all children function
 exports.getAllChildren = (request, response,next) => { 
     childrenSchema
@@ -80,22 +82,25 @@ exports.updateChild = (request, response, next) => {
     .catch((error) => next(error));
 }
 
-
-
-
-
-
 //export delete child function
 exports.deleteChild = (request, response, next) => {
-    childrenSchema
-    .deleteOne({ _id: request.params.id })
-    .then((data) => {
-      if (data.deletedCount == 0) {
-        next(new Error("child not found"));
-      } else response.status(200).json({ data });
-    })
-    .catch((error) => {
-      next(error);
-    });
-
-}
+    childrenSchema.findByIdAndDelete(request.params.id)
+      .then((data) => {
+        if (data==null) {
+         console.log(data+"from if");
+          throw new Error("Child not found");
+        }
+        console.log(data);
+  
+         classSchema.findOneAndUpdate(
+          { children:request.params.id },
+          { $pull: { children: request.params.id } }
+        );
+      })
+      .then(() => {
+        response.status(200).json({ message: "Child deleted successfully" });
+      })
+      .catch((error) => {
+        next(error);
+      });
+  };

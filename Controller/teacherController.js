@@ -2,14 +2,14 @@
 const mongoose = require('mongoose');
 // load teacher model
 require('../Model/teacherModel');
-const { body, param,query } = require('express-validator');
-
+require('../Model/classModel');
 // import bcrypt
 const bcrypt = require('bcrypt');
 
 const salt = bcrypt.genSaltSync(16);
 // teacher schema
 const teacherSchema = mongoose.model("teachers");
+const classSchema = mongoose.model("class");
 
 // export getallteacher function
 exports.getAllTeacher = (request, response) => {
@@ -60,6 +60,12 @@ exports.updateTeacher = (request, response, next) => {
 
 //export delete teacher function
 exports.deleteTeacher = (request, response, next) => {
+    classSchema.findOne({supervisor:request.body.id})
+    .then((data)=>{
+        if(data){
+            throw new Error("can't delete this teacher before set new supervisor for this class");
+        }
+        else{
     teacherSchema
     .deleteOne({ _id: request.body.id })
     .then((data) => {
@@ -67,7 +73,10 @@ exports.deleteTeacher = (request, response, next) => {
         next(new Error("teacher not found"));
       } else response.status(200).json({ data });
     })
-    .catch((error) => {
-      next(error);
-    });
     }
+    })
+    .catch((error) => {
+        next(error);
+      }
+    );
+}

@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const {body,param,query}=require("express-validator");
 // load class
 require('../Model/classModel');
+require('../Model/teacherModel');
+require('../Model/childrenModel');
 const classSchema = mongoose.model("class");
 const teacherSchema= mongoose.model("teachers");
 const childrenSchema= mongoose.model("children");
