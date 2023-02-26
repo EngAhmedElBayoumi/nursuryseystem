@@ -26,9 +26,9 @@ const router = express.Router();
 router.route('/teachers')
     .get(checkrole.checkadminorteacher,teacherController.getAllTeacher)
     .post(uploadimage,checkrole.checkadmin,teachervalidator.postValidator,validatevm,teacherController.addNewTeacher)
-    .put(uploadimage,checkrole.checkadmin,teachervalidator.putValidator,validatevm,teacherController.updateTeacher)
-    .delete(checkrole.checkadmin,teachervalidator.deleteValidator,validatevm,teacherController.deleteTeacher);
+    .put(uploadimage,checkrole.checkadminorteacher,teachervalidator.putValidator,validatevm,teacherController.updateTeacher)
+    .delete(checkrole.checkadminorteacher,teachervalidator.deleteValidator,validatevm,teacherController.deleteTeacher);
 
-    
+
 // export router
 module.exports = router;

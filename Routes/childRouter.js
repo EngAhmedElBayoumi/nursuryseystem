@@ -17,6 +17,7 @@ router.route('/children')
     .get(childrenController.getAllChildren)
     .post(childrenvalidator.postValidator,validatevm,childrenController.addNewChild)
     
+
 // get specific children whith id 
 router.route('/child/:id')
     .get(childrenvalidator.getValidator,validatevm,childrenController.getspecificChildren)
