@@ -6,6 +6,7 @@ const { body, param,query } = require('express-validator');
 // import classController 
 const classController = require('./../Controller/classController');
 
+const checkrole=require('../Core/checkrole')
 // import validatevm
 const validatevm = require('./../Core/validatevm');
 
@@ -16,9 +17,9 @@ const router = express.Router();
 
 // route /class get all data , post new class , update class date
 router.route('/classes')
-    .get(classController.getAllClasses)
-    .post(classvalidator.postValidator,validatevm,classController.addNewClass)
-    .put(classvalidator.putValidator,validatevm,classController.updateClass)
+    .get(checkrole.checkadmin,classController.getAllClasses)
+    .post(checkrole.checkadmin,classvalidator.postValidator,validatevm,classController.addNewClass)
+    .put(checkrole.checkadmin,classvalidator.putValidator,validatevm,classController.updateClass)
     .delete(classvalidator.deleteValidator,validatevm,classController.deleteClass);
 
 

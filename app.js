@@ -57,13 +57,10 @@ app.use(teacherRoute);
 app.use(childRoute);
 app.use(classRoute);
 
-
 // Middleware for handling non-existent routes
 app.use((req, res, next) => {
     res.status(404).json({ message: 'Route Not Found' });
   });
-
-
 
 // Error handling middleware
 app.use((error, req, res, next) => {
