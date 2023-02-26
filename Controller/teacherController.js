@@ -25,6 +25,7 @@ exports.getAllTeacher = (request, response) => {
 
 //export add new teacher function
 exports.addNewTeacher = (request, response, next) => {
+    console.log(request.file);
     new teacherSchema({
         _id: request.body.id,
         fullName: request.body.fullName,

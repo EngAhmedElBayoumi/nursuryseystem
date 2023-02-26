@@ -46,7 +46,7 @@ app.use(morgan(':url :method'));
 
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 
 
 
@@ -56,21 +56,6 @@ app.use(Authorization)
 app.use(teacherRoute);
 app.use(childRoute);
 app.use(classRoute);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // Middleware for handling non-existent routes
