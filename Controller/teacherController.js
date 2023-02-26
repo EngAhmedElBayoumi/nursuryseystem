@@ -1,5 +1,6 @@
 // import mongoose 
 const mongoose = require('mongoose');
+// import jsonwebtoken
 // load teacher model
 require('../Model/teacherModel');
 require('../Model/classModel');

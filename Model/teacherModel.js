@@ -3,9 +3,11 @@ const mongoose = require('mongoose');
 // teacher schema
 const teacherSchema = new mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
+
     fullName: {
         type: String,
-        required: [true, "Please Enter Teacher Name"],
+        required: [true, "Please Enter Teacher Name"], 
+        unique: true,       
       },
       password: {
         type: String,
@@ -17,7 +19,10 @@ const teacherSchema = new mongoose.Schema({
         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Please Enter Valid Email"],
         required: [true, "Please Enter Teacher Email"],
       },
+
       image: String,
+
+
     })
 
 // Mapping Schema to Model

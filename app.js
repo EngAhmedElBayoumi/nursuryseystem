@@ -10,10 +10,11 @@ const cors = require('cors')
 
 
 //import routes
+const loginRoute=require('./Routes/login');
 const teacherRoute = require('./Routes/teacherRouter');
 const childRoute = require('./Routes/childRouter');
 const classRoute = require('./Routes/classRouter');
-
+const Authorization=require('./Core/authentication')
 const app = express();
 
 
@@ -50,6 +51,8 @@ app.use(express.urlencoded({ extended: false }));
 
 
 //Routes
+app.use(loginRoute)
+app.use(Authorization)
 app.use(teacherRoute);
 app.use(childRoute);
 app.use(classRoute);
